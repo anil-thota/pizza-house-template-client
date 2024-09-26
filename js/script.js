@@ -43,7 +43,47 @@
 				multitoggle: document.querySelectorAll('[data-multitoggle]')
 			};
 
-			var PROJECTID = "";
+			
+
+	// Initialize scripts that require a loaded page
+	$window.on('load', function () {
+		// Page loader & Page transition
+		if (plugins.preloader.length && !isNoviBuilder) {
+			pageTransition({
+				page: $('.page'),
+				animDelay: 500,
+				animDuration: 500,
+				animIn: 'fadeIn',
+				animOut: 'fadeOut',
+				conditions: function (event, link) {
+					return !/(\#|callto:|tel:|mailto:|:\/\/)/.test(link) && !event.currentTarget.hasAttribute('data-lightgallery');
+				},
+				onReady: function () {
+					clearTimeout(loaderTimeoutId);
+					plugins.preloader.addClass('loaded');
+					windowReady = true;
+				}
+			});
+		}
+
+
+
+		// Isotope
+		if (plugins.isotope.length) {
+			for (var i = 0; i < plugins.isotope.length; i++) {
+				var isotopeItem = plugins.isotope[i];
+				isotopeItem.isotope.layout();
+
+				window.addEventListener('resize', function () {
+					setTimeout(function () {
+						isotopeItem.isotope.layout();
+					}, 2000);
+				});
+			}
+		}
+	});
+
+	var PROJECTID = "";
 
 			// Document ready (DOMContentLoaded) function
 			document.addEventListener("DOMContentLoaded", function () {
@@ -323,44 +363,6 @@
 						console.error('Error fetching data:', error);
 					});
 			}
-
-	// Initialize scripts that require a loaded page
-	$window.on('load', function () {
-		// Page loader & Page transition
-		if (plugins.preloader.length && !isNoviBuilder) {
-			pageTransition({
-				page: $('.page'),
-				animDelay: 500,
-				animDuration: 500,
-				animIn: 'fadeIn',
-				animOut: 'fadeOut',
-				conditions: function (event, link) {
-					return !/(\#|callto:|tel:|mailto:|:\/\/)/.test(link) && !event.currentTarget.hasAttribute('data-lightgallery');
-				},
-				onReady: function () {
-					clearTimeout(loaderTimeoutId);
-					plugins.preloader.addClass('loaded');
-					windowReady = true;
-				}
-			});
-		}
-
-
-
-		// Isotope
-		if (plugins.isotope.length) {
-			for (var i = 0; i < plugins.isotope.length; i++) {
-				var isotopeItem = plugins.isotope[i];
-				isotopeItem.isotope.layout();
-
-				window.addEventListener('resize', function () {
-					setTimeout(function () {
-						isotopeItem.isotope.layout();
-					}, 2000);
-				});
-			}
-		}
-	});
 
 	// Initialize scripts that require a finished document
 	$(function () {
