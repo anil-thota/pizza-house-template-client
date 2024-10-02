@@ -147,6 +147,11 @@
 				updateAboutSection();
 				
 				fetchAndDisplayGalleryProducts();
+				updateAboutUsBanner();
+				updateContactsBanner();
+				updateTypographyBAnner();
+				updateProductDetails();
+				
 			   
 			}
 			
@@ -295,74 +300,271 @@
 			  
 			  
 			
-			function fetchAndDisplayGalleryProducts() {
-				const apiUrl = `http://localhost:3001/properties/${PROJECTID}/product`;
+			
+
+			function updateAboutUsBanner() {
+				const apiUrl = `http://localhost:3001/properties/${PROJECTID}/banner`;
+			
+				// Fetch banner data from the API using Fetch
+				fetch(apiUrl)
+				  .then(response => {
+					// Check if the response is ok (status in the range 200-299)
+					if (!response.ok) {
+					  throw new Error(`HTTP error! status: ${response.status}`);
+					}
+					return response.json(); // Parse the JSON from the response
+				  })
+				  .then(data => {
+					// Log the response data
+					console.log('API Response:', data);
+			
+					// Find the banner with heading "Aboutus"
+					const aboutUsBanner = data.categoryBanners.find(banner => 
+					  banner.heading.toLowerCase() === "aboutus"
+					);
+			
+					// Check if the banner exists and has a valid image URL
+					if (aboutUsBanner && aboutUsBanner.image) {
+					  // Log the image URL
+					  console.log('About Us Banner Image URL:', aboutUsBanner.image);
+			
+					  // Select the section where the background image needs to be applied
+					  const aboutUsSection = document.querySelector('.breadcrumbs-01');
+			
+					  // Log the aboutUsSection to confirm it's selected correctly
+					  console.log('About Us Section:', aboutUsSection);
+			
+					  // Apply the background image using inline CSS
+					  aboutUsSection.style.backgroundImage = `url('${aboutUsBanner.image}')`;
+					  aboutUsSection.style.backgroundSize = 'cover'; // Ensures the image covers the section
+					  aboutUsSection.style.backgroundPosition = 'center'; // Centers the image
+					  aboutUsSection.style.backgroundRepeat = 'no-repeat'; // Avoid repeating the image
+					} else {
+					  console.error('No valid banner found with the heading "Aboutus".');
+					}
+				  })
+				  .catch(error => {
+					console.error("Error fetching banner data:", error);
+				  });
+			}
+
+			function updateContactsBanner(){
+				const apiUrl = `http://localhost:3001/properties/${PROJECTID}/banner`;
+				// Fetch banner data from the API using Fetch
+				fetch(apiUrl)
+				  .then(response => {
+					// Check if the response is ok (status in the range 200-299)
+					if (!response.ok) {
+					  throw new Error(`HTTP error! status: ${response.status}`);
+					}
+					return response.json(); // Parse the JSON from the response
+				  })
+				  .then(data => {
+					// Log the response data
+					console.log('API Response:', data);
+			  
+					// Find the banner with heading "Aboutus"
+					const aboutUsBanner = data.categoryBanners.find(banner => 
+					  banner.heading.toLowerCase() === "contacts"
+					);
+			  
+					// Check if the banner exists and has a valid image URL
+					if (aboutUsBanner && aboutUsBanner.image) {
+					  // Log the image URL
+					  console.log('About Us Banner Image URL:', aboutUsBanner.image);
+			  
+					  // Select the section where the background image needs to be applied
+					  const aboutUsSection = document.querySelector('.breadcrumbs-02');
+			  
+					  // Log the aboutUsSection to confirm it's selected correctly
+					  console.log('About Us Section:', aboutUsSection);
+			  
+					  // Apply the background image using inline CSS
+					  aboutUsSection.style.backgroundImage = `url('${aboutUsBanner.image}')`;
+					  aboutUsSection.style.backgroundSize = 'cover'; // Ensures the image covers the section
+					  aboutUsSection.style.backgroundPosition = 'center'; // Centers the image
+					  aboutUsSection.style.backgroundRepeat = 'no-repeat'; // Avoid repeating the image
+					} else {
+					  console.error('No valid banner found with the heading "Aboutus".');
+					}
+				  })
+				  .catch(error => {
+					console.error("Error fetching banner data:", error);
+				  });
+			  }
+
+			  function updateTypographyBAnner(){
+				const apiUrl = `http://localhost:3001/properties/${PROJECTID}/banner`;
+				// Fetch banner data from the API using Fetch
+				fetch(apiUrl)
+				  .then(response => {
+					// Check if the response is ok (status in the range 200-299)
+					if (!response.ok) {
+					  throw new Error(`HTTP error! status: ${response.status}`);
+					}
+					return response.json(); // Parse the JSON from the response
+				  })
+				  .then(data => {
+					// Log the response data
+					console.log('API Response:', data);
+			  
+					// Find the banner with heading "Aboutus"
+					const aboutUsBanner = data.categoryBanners.find(banner => 
+					  banner.heading.toLowerCase() === "typography"
+					);
+			  
+					// Check if the banner exists and has a valid image URL
+					if (aboutUsBanner && aboutUsBanner.image) {
+					  // Log the image URL
+					  console.log('About Us Banner Image URL:', aboutUsBanner.image);
+			  
+					  // Select the section where the background image needs to be applied
+					  const aboutUsSection = document.querySelector('.breadcrumbs-03');
+			  
+					  // Log the aboutUsSection to confirm it's selected correctly
+					  console.log('About Us Section:', aboutUsSection);
+			  
+					  // Apply the background image using inline CSS
+					  aboutUsSection.style.backgroundImage = `url('${aboutUsBanner.image}')`;
+					  aboutUsSection.style.backgroundSize = 'cover'; // Ensures the image covers the section
+					  aboutUsSection.style.backgroundPosition = 'center'; // Centers the image
+					  aboutUsSection.style.backgroundRepeat = 'no-repeat'; // Avoid repeating the image
+					} else {
+					  console.error('No valid banner found with the heading "Aboutus".');
+					}
+				  })
+				  .catch(error => {
+					console.error("Error fetching banner data:", error);
+				  });
+			  }
+
+			  function updateProductDetails() { 
+				fetch(`http://localhost:3001/properties/${PROJECTID}/product`)
+				  .then(response => response.json())
+				  .then(data => {
+					if (data.allProducts && data.allProducts.length > 0) {
+					  console.log('Product details:', data);
+			  
+					  // Select all product elements in the DOM
+					  const productElements = document.querySelectorAll('.product');
+			  
+					  data.allProducts.forEach((product, index) => {
+						// Ensure the index doesn't exceed the number of product elements in the DOM
+						if (index < productElements.length) {
+						  const productElement = productElements[index];
+			  
+						  // Update product title
+						  const titleElement = productElement.querySelector('.product-title');
+						  if (titleElement) {
+							titleElement.textContent = product.title;
+						  }
+			  
+						  // Update product image
+						  const imageElement = productElement.querySelector('.product-figure img');
+						  if (imageElement) {
+							imageElement.src = product.images[0];
+							imageElement.alt = product.title;
+							imageElement.style.width = "160px"; // Maintain the width as per original design
+							imageElement.style.height = "160px"; // Maintain the height as per original design
+						  }
+			  
+						  // Update product price
+						  const priceElement = productElement.querySelector('.product-price');
+						  if (priceElement) {
+							priceElement.textContent = `$${product.price}`;
+						  }
+						} else {
+						  console.error(`No product element found for product at index ${index}`);
+						}
+					  });
+					} else {
+					  console.error('No products found in the response');
+					}
+				  })
+				  .catch(error => {
+					console.error('Error fetching the product details:', error);
+				  });
+			  }
+
+			  function fetchAndDisplayGalleryProducts() {
+				const apiUrl = `http://localhost:3001/properties/${PROJECTID}/banner`;
 			
 				// Fetch the product data from the API
 				fetch(apiUrl)
-					.then(response => response.json())
-					.then(data => {
-						// Filter the products to include only those with the category name "GALLERY"
-						const galleryProducts = data.allProducts.filter(item => item.category.name === 'GALLERY');
+				.then(response => response.json())
+				.then(data => {
+					// Get the container where gallery items will be appended
+					const container = document.querySelector('.rd-navbar-project-content .row');
 			
-						console.log("Gallery", galleryProducts);
+					// Clear existing gallery items if needed
+					container.innerHTML = '';
 			
-						// Get the container where thumbnails will be appended or updated
-						const container = document.querySelector('.gallery-container');
+					// Filter banners where heading is "Gallery"
+					const galleryBanners = data.categoryBanners.filter(banner => banner.heading.toLowerCase() === "gallery");
 			
-						// Clear existing thumbnails (if needed)
-						container.innerHTML = '';
+					// Loop through the filtered gallery banners and create gallery items
+					galleryBanners.forEach(banner => {
+						// Create a new div for each gallery item
+						const colDiv = document.createElement('div');
+						colDiv.classList.add('col-6');
 			
-						// Loop through the gallery products and create/update thumbnails
-						galleryProducts.forEach(product => {
-							// Create a new thumbnail element
-							const item = document.createElement('div');
-							item.classList.add('col-xs-12', 'col-sm-6', 'col-md-3', 'isotope-item', 'wow', 'fadeInUp');
-							item.dataset.filter = 'Category 1';
+						// Create the article element for the thumbnail
+						const articleElement = document.createElement('article');
+						articleElement.classList.add('thumbnail', 'thumbnail-creative');
 			
-							// Create a link element wrapping the thumbnail image
-							const linkElement = document.createElement('a');
-							linkElement.classList.add('portfolio-item', 'thumbnail-classic');
-							linkElement.href = product.images[0];
-							linkElement.dataset.size = '1200x800'; // Adjust size if needed
-							linkElement.dataset.lightgallery = 'item';
+						// Create the anchor element
+						const anchorElement = document.createElement('a');
+						anchorElement.href = banner.image;  // Full-size image URL
+						anchorElement.dataset.lightgallery = 'item';  // LightGallery attribute
 			
-							// Create and append the image element
-							const imageElement = document.createElement('img');
-							imageElement.src = product.images[0];
-							imageElement.alt = product.title;
-							imageElement.width = 420; // Adjust width and height as needed
-							imageElement.height = 278;
+						// Create the div for the image figure
+						const figureDiv = document.createElement('div');
+						figureDiv.classList.add('thumbnail-creative-figure');
 			
-							// Create and append the caption element
-							const captionElement = document.createElement('div');
-							captionElement.classList.add('caption');
-							const thumbsUp = document.createElement('span');
-							thumbsUp.classList.add('icon', 'mdi-thumb-up-outline');
-							thumbsUp.textContent = '346'; // Replace with actual data if available
-							const eyeIcon = document.createElement('span');
-							eyeIcon.classList.add('icon', 'mdi-eye');
-							eyeIcon.textContent = '220'; // Replace with actual data if available
+						// Create and append the image element
+						const imageElement = document.createElement('img');
+						imageElement.src = banner.image;  // Thumbnail image URL
+						imageElement.alt = banner.heading;
+						imageElement.width = 195;  // Set width to match your example
+						imageElement.height = 164;  // Set height to match your example
 			
-							captionElement.appendChild(thumbsUp);
-							captionElement.appendChild(eyeIcon);
+						// Append the image to the figure div
+						figureDiv.appendChild(imageElement);
 			
-							// Assemble the thumbnail item
-							linkElement.appendChild(imageElement);
-							linkElement.appendChild(captionElement);
-							item.appendChild(linkElement);
+						// Create the caption div
+						const captionDiv = document.createElement('div');
+						captionDiv.classList.add('thumbnail-creative-caption');
 			
-							// Append the new thumbnail to the container
-							container.appendChild(item);
-						});
+						// Create and append the magnifier icon
+						const iconSpan = document.createElement('span');
+						iconSpan.classList.add('icon', 'thumbnail-creative-icon', 'linearicons-magnifier');
+						captionDiv.appendChild(iconSpan);
 			
-						// Initialize LightGallery or any other required plugins
-						// For example: lightGallery(container, {selector: '.portfolio-item'});
-					})
-					.catch(error => {
-						console.error('Error fetching data:', error);
+						// Append the figure and caption to the anchor element
+						anchorElement.appendChild(figureDiv);
+						anchorElement.appendChild(captionDiv);
+			
+						// Append the anchor to the article
+						articleElement.appendChild(anchorElement);
+			
+						// Append the article to the colDiv
+						colDiv.appendChild(articleElement);
+			
+						// Append the colDiv to the container
+						container.appendChild(colDiv);
 					});
+			
+					// Initialize LightGallery if required (uncomment if you have this library)
+					// lightGallery(container, {selector: '[data-lightgallery="item"]'});
+				})
+				.catch(error => {
+					console.error('Error fetching data:', error);
+				});
 			}
+			
+			  
+			
+			
 
 	// Initialize scripts that require a finished document
 	$(function () {
